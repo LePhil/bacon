@@ -1,16 +1,6 @@
-﻿(function () {
-    requirejs.config({
-    	paths: {
-    		jquery: 'Libs/jquery-2.0.3',
-    		doT: 'Libs/doT/doT',
-    		bootstrap: 'Libs/bootstrap/js/bootstrap.min',
-    		sammy: 'Libs/sammy',
-    		'socket.io': '/socket.io/socket.io'
-    	}
-    });
-})();
+﻿require(['jquery', 'ui', 'socket.io', 'sammy', 'dataservice'],
+function( $, ui, io, sammy, dataservice ) {
 
-define(['ui', 'jquery', 'sammy', 'socket.io', 'dataservice'], function(ui, $, sammy, io, dataservice) {
 
 	ui.init();
 
@@ -21,13 +11,14 @@ define(['ui', 'jquery', 'sammy', 'socket.io', 'dataservice'], function(ui, $, sa
 
 	var app = sammy("body", function(){
 
-		this.get("#/", function(context){ context.log("entries"); ui.showEntries();	});
-		this.post("#/login", function(context){ context.log("login"); ui.login(); });
-		this.post("#/logout", function(context){ context.log("logout"); ui.logout(); });
-		this.get("#/register", function(context){ context.log("register"); ui.showRegistration(); });
+		// Sammy rules:
+		this.get("#/", 			function(context){ ui.showEntries(); context.log("entries"); });
+		this.post("#/login", 	function(context){ ui.login(); context.log("login"); });
+		this.post("#/logout", 	function(context){ ui.logout(); context.log("logout"); });
+		this.get("#/register", 	function(context){ ui.showRegistration(); context.log("register"); });
 		this.post("#/register", function(context){ ui.register(); });
-		this.get("#/submit", function(context){ context.log("submit"); ui.showSubmitEntry(); });
-		this.post("#/entry", function(context){ context.log("post entry"); ui.postEntry(); this.redirect("#/"); });
+		this.get("#/submit", 	function(context){ ui.showSubmitEntry(); context.log("submit"); });
+		this.post("#/entry", 	function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
 		this.get("#/entry/:id", function(context) { var id = this.params['id']; context.log("show entry", id); ui.showEntry(id); });
 
 		this.bind("register-success", function() {

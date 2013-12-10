@@ -5,3 +5,7 @@
 .container#content {
 	margin-top: 70px;
 }
+
+#login {
+	padding: 5px;
+}

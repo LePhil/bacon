@@ -5,13 +5,16 @@
 	templates.message = doT.template($("#template-message").text());
 	templates.comment = doT.template($("#template-comment").text());
 
-	function showError(message) {
-		$("#content").prepend($(templates.message(message)).addClass("alert-danger"));
+	function showError( message ) {
+		
+		$("#content").prepend(
+			$( templates.message( message ) ).addClass("alert-danger")
+		);
 	}
 
-	function showMessage(message) {
-		var msg = $(templates.message(message)).addClass("alert-info");
-		$("#content").prepend(msg);	
+	function showMessage( message ) {
+		var msg = $( templates.message( message ) ).addClass("alert-info");
+		$("#content").prepend( msg );	
 		setTimeout(function(){ msg.remove(); }, 5000); // autoremove after 5s
 	}
 
@@ -62,7 +65,7 @@
 		$("#entries").empty();
 
 		$.each(entries, function(index, entry) {
-			$("#entries").append(templates.link(entry));
+			$("#entries").append( templates.link(entry));
 		});
 
 		$("a[id|=link-vote]").click(function(){
@@ -99,34 +102,50 @@
 			show("#showEntry");
 
 			dataservice.entry.get(id).then(function(link) {
-				$("#showEntry").append(templates.link(link)).append("<p/>");
+				$("#showEntry").append( templates.link(link)).append("<p/>");
 
 				var renderChildren = function(parentId, comment){
 					console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
-					$("#comment-children-" + parentId).append(templates.comment(comment));
+					$("#comment-children-" + parentId).append( templates.comment(comment));
 					$(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
 				};
 
 				$(link.comments).each(function(index, comment){
 					console.log("link.comments each", comment, !!comment);
-					$("#showEntry").append(templates.comment(comment));
+					$("#showEntry").append( templates.comment(comment));
 					$(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
 				});
 			});
 			
 		},
 		login: function() {
-			dataservice.user.login($("#login_name").val(), $("#login_password").val());
+			dataservice.user.login(
+				$("#login_name").val(),
+				$("#login_password").val()
+			);
+
+			// Hide loginArea
 			$('.dropdown.open .dropdown-toggle').dropdown('toggle');
 		},
 		logout: function(){
 			dataservice.user.logout();
 		},
 		register: function() {
-			dataservice.user.register($("#register_name").val(), $("#register_password").val());
+			if ( $("#register_name").val() !== "" && $("#register_name").val() !== null &&
+				 $("#register_password").val() !== "" && $("#register_password").val() !== null  ) {
+				dataservice.user.register(
+					$("#register_name").val(),
+					$("#register_password").val()
+				);
+			} else {
+				showMessage( "Username and Password cannot be empty" );
+			}
 		},
 		postEntry: function() {
-			dataservice.entry.post($("#entry_title").val(), $("#entry_url").val());
+			dataservice.entry.post(
+				$("#entry_title").val(),
+				$("#entry_url").val()
+			);
 		},
 		init: function(){
 			initLoginArea(this);
