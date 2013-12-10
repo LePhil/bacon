@@ -1,1 +1,7 @@
-﻿
+﻿nav.navbar {
+	width: 100%;
+}
+
+.container#content {
+	margin-top: 70px;
+}

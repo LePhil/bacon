@@ -1,8 +1,8 @@
 var express = require('express');
+var http = require('http');
 var User = require('./user.js');
 var Link = require('./link.js');
 var Comment = require('./comment.js');
-var http = require('http');
 var io = require('socket.io');
 
 var allowCrossDomain = function(req, res, next) {
@@ -63,8 +63,9 @@ function returnIndex(res, id, array) {
 }
 
 app.get('/', function(req, res) {
-  res.type('text/plain'); 
-  res.json(entries);
+  //res.type('text/plain'); 
+  //res.json(entries);
+  res.redirect('client.html');
 });
  
 app.get('/login', function (req, res) {
@@ -108,11 +109,10 @@ app.get('/login', function (req, res) {
  });
 
  
- 
  app.get('/entries', function (req, res) {
+    console.log("get entries: ", entries.length);
     res.json(entries);
 });
-
 
 app.post('/entry', function(req, res) {
     var newLink = new Link(entries.length, req.body.title, users[req.session.user_id].name, req.body.url);	
@@ -173,7 +173,7 @@ app.post('/logout', function (req, res) {
 app.use('/', express.static(__dirname + '/public/'));
 
 //socket:
-io = io.listen(app.listen(process.env.PORT || 4730));
+io = io.listen(app.listen(process.env.PORT || 4731));
 
 io.sockets.on('connection', function (socket) {
     socket.emit('message', { action: 'connected' });
