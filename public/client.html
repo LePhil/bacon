@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>VoteBacon V2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="Libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="client.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
+    <script data-main="init.js" src="Libs/require.js"></script>
+    
+    <!-- TEMPLATES FOR DOT.JS -->
+    <script id="template-link" type="text/template">
+        <div class="link container row">
+            <div class="col-md-1 center">
+                <a id="link-vote-up-{{=it.id}}" href="#/"><img src="images/arrow_up_32.png" /></a>
+                <p id="link-rating-{{=it.id}}">{{=it.rating.value}}</p>
+                <a id="link-vote-down-{{=it.id}}" href="#/"><img src="images/blue_arrow_down_32.png" /></a>
+            </div>
+            <div class="panel-heading col-md-offset-1">
+                <h2><a class="external" href="{{=it.url}}">{{=it.title}}</a></h2>
+                <small>By <strong>{{=it.author}}</strong> {{=it.createTimeDisplay}}</small>
+                <p>
+                    <img src="images/comment_32.png" />
+                    <a id="link-comment-{{=it.id}}" href="#/entry/{{=it.id}}">Comment</a>
+                </p>
+            </div>
+        </div>
+    </script>
+    <script id="template-comment" type="text/template">
+        <div class="comment container row">
+            <div class="col-md-1 center">
+                <a id="comment-vote-up-{{=it.id}}" href="#/"><img src="images/arrow_up_32.png" /></a>
+                <p id="comment-rating-{{=it.id}}">{{=it.rating.value}}</p>
+                <a id="comment-vote-down-{{=it.id}}" href="#/"><img src="images/blue_arrow_down_32.png" /></a>
+            </div>
+            <div>
+                <small>By <strong>{{=it.author}}</strong> {{=it.createTimeDisplay}}</small>
+                <p>{{=it.text}}</p>
+                <a href="#/reply/{{=it.id}}">Reply</a>
+                <div id="comment-children-{{=it.id}}" class="col-md-offset-1"></div>
+
+            </div>
+        </div>
+    </script>
+    <script id="template-message" type="text/template">
+       <div class="alert col-md-4 col-md-offset-2">
+            <button class="close" data-dismiss="alert" type="button">&times;</button>
+            <span>{{=it}}</span>
+        </div>
+    </script>
+</head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top container" role="navigation">
+            <a class="navbar-brand" href="#/">VoteBacon</a>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a id="submitLink" class="btn">Submit Link</a></li>
+            </ul>
+            <ul id="nav-logout" class="nav navbar-nav navbar-right" style="display:none">
+                <li></li>
+                <li>
+                    <form class="navbar-form" id="logout" method="post" action="#/logout">
+                        <input class="btn btn-primary" type="submit" value="Log out" />
+                    </form>
+                </li>
+            </ul>
+            <ul id="nav-login" class="nav navbar-nav navbar-right" style="display:none">
+                <li><a id="register" href="#/register">Register</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+                    <div class="dropdown-menu">
+                        <form id="login" action="#/login" method="post" accept-charset="utf-8">
+                            <div class="form-group">
+                                <label for="login_name">Username</label>
+                                <input id="login_name" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label for="login_password">Password</label>
+                                <input id="login_password" type="password" class="form-control" />
+                            </div>
+                            <input class="btn btn-primary" type="submit" name="signin" value="Sign In" />
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="container" id="content">
+            <div class="container hidden" id="entries"></div>
+            <div class="container hidden" id="registration">
+                <form id="registration-form" class="form col-md-4 col-md-offset-4" action="#/register" method="post" accept-charset="utf-8">
+                    <div class="form-group">
+                        <label for="register_name">Username</label>
+                        <input id="register_name" class="form-control" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="register_password">Password</label>
+                        <input id="register_password" class="form-control" type="password" />
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Register" />
+                </form>
+            </div>
+            <div class="container hidden" id="submitEntry">
+                <form id="submitLink-form" class="form col-md-4 col-md-offset-4" action="#/entry" method="post" accept-charset="utf-8">
+                    <h3>Submit Entry</h3>
+                    <div class="form-group">
+                        <label for="entry_title">Title</label>
+                        <input id="entry_title" class="form-control" type="text" />
+                    </div>
+                    <div class="form-group">
+                        <label for="entry_url">Url</label>
+                        <input id="entry_url" class="form-control" type="text" />
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Submit" />
+                </form>
+            </div>
+            <div class="container hidden" id="showEntry">
+            </div> 
+        </div> 
+    </body>
+</html>
