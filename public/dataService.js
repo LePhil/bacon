@@ -15,6 +15,11 @@
 				$.post("entry/" + id + "/" + direction);
 			}
 		},
+        comment: {
+            post: function(id, comment){
+                $.post("entry/" + id + "/comment", {text: comment})
+            }
+        },
 		user: {
 			loggedInUser: undefined,
 			checkLoggedIn: function(){

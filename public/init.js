@@ -18,7 +18,8 @@ function( $, ui, io, sammy, dataservice ) {
 		this.get("#/register", 	function(context){ ui.showRegistration(); context.log("register"); });
 		this.post("#/register", function(context){ ui.register(); });
 		this.get("#/submit", 	function(context){ ui.showSubmitEntry(); context.log("submit"); });
-		this.post("#/entry", 	function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
+        this.post("#/entry", 	function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
+        this.post("#/entry/:id/comment", function(context){ var id = this.params['id']; ui.postComment(id); context.log("post comment"); ui.showEntry(id); });
 		this.get("#/entry/:id", function(context) { var id = this.params['id']; context.log("show entry", id); ui.showEntry(id); });
 
 		this.bind("register-success", function() { this.redirect("#/"); });

@@ -3,6 +3,7 @@
 	var templates = {};
 	templates.link = doT.template($("#template-link").text());
 	templates.message = doT.template($("#template-message").text());
+    templates.addComment = doT.template($("#template-addComment").text());
 	templates.comment = doT.template($("#template-comment").text());
 
 	function showError( message ) {
@@ -99,11 +100,13 @@
 		showEntry: function(id){
 			hideAll();
 			$("#showEntry").empty();
+            $("#addComment").empty();
 			show("#showEntry");
+            show("#addComment");
 
 			dataservice.entry.get(id).then(function(link) {
 				$("#showEntry").append( templates.link(link)).append("<p/>");
-
+                $("#addComment").append(templates.addComment({id: id}));
 				var renderChildren = function(parentId, comment){
 					console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
 					$("#comment-children-" + parentId).append( templates.comment(comment));
@@ -112,7 +115,7 @@
 
 				$(link.comments).each(function(index, comment){
 					console.log("link.comments each", comment, !!comment);
-					$("#showEntry").append( templates.comment(comment));
+					$("#addComment").after( templates.comment(comment));
 					$(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
 				});
 			});
@@ -147,6 +150,13 @@
 				$("#entry_url").val()
 			);
 		},
+
+        postComment: function(id){
+            var value = $("#commentField").val();
+            $("#commentField").val("")
+            dataservice.comment.post(id, value);
+        },
+
 		init: function(){
 			initLoginArea(this);
 			initRegisterArea(this);

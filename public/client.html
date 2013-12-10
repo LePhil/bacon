@@ -29,6 +29,15 @@
             </div>
         </div>
     </script>
+    <script id="template-addComment" type="text/template">
+        <form role="form" action="#/entry/{{=it.id}}/comment" method="post" accept-charset="utf-8">
+            <div class="form-group">
+                <label for="commentField">Your Comment</label>
+                <textarea class="form-control" rows="3" id="commentField" name="commentField"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </script>
     <script id="template-comment" type="text/template">
         <div class="comment container row">
             <div class="col-md-1 center">
@@ -42,7 +51,6 @@
                 <p>{{=it.text}}</p>
                 <a href="#/reply/{{=it.id}}">Reply</a>
                 <div id="comment-children-{{=it.id}}" class="col-md-offset-1"></div>
-
             </div>
         </div>
     </script>
@@ -102,7 +110,7 @@
                     <input class="btn btn-primary" type="submit" value="Register" />
                 </form>
             </div>
-            <div class="container hidden" id="submitEntry">
+            <div class="container" id="submitEntry">
                 <form id="submitLink-form" class="form col-md-4 col-md-offset-4" action="#/entry" method="post" accept-charset="utf-8">
                     <h3>Submit Entry</h3>
                     <div class="form-group">
@@ -117,7 +125,9 @@
                 </form>
             </div>
             <div class="container hidden" id="showEntry">
-            </div> 
+            </div>
+            <div id="addComment">
+            </div>
         </div> 
     </body>
 </html>
