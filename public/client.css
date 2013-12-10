@@ -9,3 +9,8 @@
 #login {
 	padding: 5px;
 }
+
+.hand {
+	cursor: pointer;
+	cursor: hand;
+}

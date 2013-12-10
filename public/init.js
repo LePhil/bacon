@@ -21,21 +21,13 @@ function( $, ui, io, sammy, dataservice ) {
 		this.post("#/entry", 	function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
 		this.get("#/entry/:id", function(context) { var id = this.params['id']; context.log("show entry", id); ui.showEntry(id); });
 
-		this.bind("register-success", function() {
-			this.redirect("#/");
-		})
+		this.bind("register-success", function() { this.redirect("#/"); });
 	});
 
+	// Start the app
 	app.run("#/");
 
-	console.log( dataservice.entry.getAll() );
-
     $.support.cors = true;
-    //TODO create db service
-    //window.data = $.fn.DataService();  //exist till the site is changed
-    //sessionStorage.dataService = $.fn.DataService();  //stores data for one session
-    //localStorage.dataService = $.fn.DataService();  //stores data with no expiration date
-    
     $.ajaxSetup({
         cache: false
     });

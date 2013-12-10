@@ -32,7 +32,8 @@
     <script id="template-comment" type="text/template">
         <div class="comment container row">
             <div class="col-md-1 center">
-                <a id="comment-vote-up-{{=it.id}}" href="#/"><img src="images/arrow_up_32.png" /></a>
+                <a id="comment-vote-up-{{=it.id}}" href="#/">
+                    <img src="images/arrow_up_32.png" /></a>
                 <p id="comment-rating-{{=it.id}}">{{=it.rating.value}}</p>
                 <a id="comment-vote-down-{{=it.id}}" href="#/"><img src="images/blue_arrow_down_32.png" /></a>
             </div>
@@ -68,8 +69,8 @@
             </ul>
             <ul id="nav-login" class="nav navbar-nav navbar-right" style="display:none">
                 <li><a id="register" href="#/register">Register</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+                <li class="dropdown hand">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret hand"></b></a>
                     <div class="dropdown-menu">
                         <form id="login" action="#/login" method="post" accept-charset="utf-8">
                             <div class="form-group">
