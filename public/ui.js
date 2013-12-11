@@ -107,20 +107,37 @@
 			dataservice.entry.get(id).then(function(link) {
 				$("#showEntry").append( templates.link(link)).append("<p/>");
                 $("#addComment").append(templates.addComment({id: id}));
-				var renderChildren = function(parentId, comment){
-					console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
-					$("#comment-children-" + parentId).append( templates.comment(comment));
-					$(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
-				};
 
-				$(link.comments).each(function(index, comment){
-					console.log("link.comments each", comment, !!comment);
-					$("#addComment").after( templates.comment(comment));
-					$(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
-				});
+                ui.renderComments(link);
 			});
 			
 		},
+        renderComments: function(link){
+            $('.comment').remove();
+
+            var renderChildren = function(parentId, comment){
+                console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
+                $("#comment-children-" + parentId).append( templates.comment(comment));
+                $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
+            };
+
+            $(link.comments).each(function(index, comment){
+                console.log("link.comments each", comment, !!comment);
+                $("#addComment").after( templates.comment(comment));
+                $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
+            });
+
+            $(".commentVoteUp").on('click', function(e){
+                e.preventDefault();
+                var commentId = $(this).data('id');
+                ui.voteCommentUp(link.id,commentId);
+            });
+            $(".commentVoteDown").on('click', function(e){
+                e.preventDefault();
+                var commentId = $(this).data('id');
+                ui.voteCommentDown(link.id,commentId);
+            });
+        },
 		login: function() {
 			dataservice.user.login(
 				$("#login_name").val(),
@@ -155,6 +172,20 @@
             var value = $("#commentField").val();
             $("#commentField").val("")
             dataservice.comment.post(id, value);
+        },
+
+        voteCommentUp: function(linkId, commentId){
+            dataservice.comment.vote(commentId, "up")
+            var link = dataservice.entry.get(linkId).then(function(link) {
+                ui.renderComments(link);
+            });
+        },
+
+        voteCommentDown: function(linkId, commentId){
+            dataservice.comment.vote(commentId, "down")
+            var link = dataservice.entry.get(linkId).then(function(link) {
+                ui.renderComments(link);
+            });
         },
 
 		init: function(){
