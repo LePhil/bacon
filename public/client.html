@@ -14,17 +14,23 @@
     <!-- TEMPLATES FOR DOT.JS -->
     <script id="template-link" type="text/template">
         <div class="link container row">
-            <div class="col-md-1 center">
-                <a id="link-vote-up-{{=it.id}}" href="#/"><img src="images/arrow_up_32.png" /></a>
+            <div class="votingContainer">
+                <a id="link-vote-up-{{=it.id}}" href="#/">
+                    <img src="images/arrow_up_32.png" />
+                </a>
                 <p id="link-rating-{{=it.id}}">{{=it.rating.value}}</p>
-                <a id="link-vote-down-{{=it.id}}" href="#/"><img src="images/blue_arrow_down_32.png" /></a>
+                <a id="link-vote-down-{{=it.id}}" href="#/">
+                    <img src="images/blue_arrow_down_32.png" />
+                </a>
             </div>
             <div class="panel-heading col-md-offset-1">
-                <h2><a class="external" href="{{=it.url}}">{{=it.title}}</a></h2>
-                <small>By <strong>{{=it.author}}</strong> {{=it.createTimeDisplay}}</small>
+                <h2>
+                    <a class="external" href="{{=it.url}}">{{=it.title}}</a>
+                </h2>
+                <p>Submitted at {{=it.createTimeDisplay}} by <span class="username">{{=it.author}}</span></p>
                 <p>
                     <img src="images/comment_32.png" />
-                    <a id="link-comment-{{=it.id}}" href="#/entry/{{=it.id}}">Comment</a>
+                    <a id="link-comment-{{=it.id}}" href="#/entry/{{=it.id}}">Comments</a>
                 </p>
             </div>
         </div>
