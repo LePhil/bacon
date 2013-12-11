@@ -170,8 +170,10 @@
 
         postComment: function(id){
             var value = $("#commentField").val();
-            $("#commentField").val("")
-            dataservice.comment.post(id, value);
+            if(value){
+                $("#commentField").val("")
+                dataservice.comment.post(id, value);
+            }
         },
 
         voteCommentUp: function(linkId, commentId){
