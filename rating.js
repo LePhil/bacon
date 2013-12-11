@@ -4,7 +4,7 @@ module.exports = function Rating() {
     var self = this;
     
     this._up = function(userId) {
-        if (!voters[userId]) {
+       if (!voters[userId]) {
             self.value++;
             voters[userId] = true;
         }

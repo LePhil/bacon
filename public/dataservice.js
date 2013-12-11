@@ -17,9 +17,9 @@
 			}
 		},
         comment: {
-            post: function(id, comment){
+            post: function(id, root, comment){
             	console.log( "post on comment" );
-                $.post("entry/" + id + "/comment", {text: comment})
+                $.post(root + "/" + id + "/comment", {text: comment})
             },
             vote: function(id, direction){
                 $.post("comment/" + id + "/" + direction);

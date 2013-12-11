@@ -13,7 +13,7 @@
     
     <!-- TEMPLATES FOR DOT.JS -->
     <script id="template-link" type="text/template">
-        <div class="link container row">
+        <div class="link container row" data-id="{{=it.id}}">
             <div class="votingContainer">
                 <a id="link-vote-up-{{=it.id}}" href="#/">
                     <img src="images/arrow_up_32.png" />
@@ -36,10 +36,10 @@
         </div>
     </script>
     <script id="template-addComment" type="text/template">
-        <form role="form" action="#/entry/{{=it.id}}/comment" method="post" accept-charset="utf-8">
+        <form role="form" action="#/{{=it.root}}/{{=it.id}}/comment" method="post" accept-charset="utf-8">
             <div class="form-group">
-                <label for="commentField">Your Comment</label>
-                <textarea class="form-control" rows="3" id="commentField" name="commentField"></textarea>
+                <label for="commentField-{{=it.root}}-{{=it.id}}">Your Comment</label>
+                <textarea class="form-control" rows="3" id="commentField-{{=it.root}}-{{=it.id}}" name="commentField-{{=it.root}}-{{=it.id}}"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -52,11 +52,11 @@
                 <p id="comment-rating-{{=it.id}}">{{=it.rating.value}}</p>
                 <a id="comment-vote-down-{{=it.id}}" class="commentVoteDown" data-id="{{=it.id}}" href="#"><img src="images/blue_arrow_down_32.png" /></a>
             </div>
-            <div>
+            <div class="col-md-offset-1 commentInfo">
                 <small>By <strong>{{=it.author}}</strong> {{=it.createTimeDisplay}}</small>
                 <p>{{=it.text}}</p>
-                <a href="#/reply/{{=it.id}}">Reply</a>
-                <div id="comment-children-{{=it.id}}" class="col-md-offset-1"></div>
+                <a href="#" class="reply" data-id="{{=it.id}}">Reply</a>
+                <div id="comment-children-{{=it.id}}" class="comment-children"></div>
             </div>
         </div>
     </script>

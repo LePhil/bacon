@@ -106,12 +106,18 @@
 
 			dataservice.entry.get(id).then(function(link) {
 				$("#showEntry").append( templates.link(link)).append("<p/>");
-                $("#addComment").append(templates.addComment({id: id}));
+                $("#addComment").append(templates.addComment({root: "entry", id: id}));
 
                 ui.renderComments(link);
 			});
 			
 		},
+        showComments: function(){
+            var linkId = $(".link").data("id");
+            dataservice.entry.get(linkId).then(function(link) {
+                ui.renderComments(link);
+            });
+        },
         renderComments: function(link){
             $('.comment').remove();
 
@@ -125,6 +131,13 @@
                 console.log("link.comments each", comment, !!comment);
                 $("#addComment").after( templates.comment(comment));
                 $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
+            });
+
+            $(".reply").on('click', function(e){
+                e.preventDefault();
+                var id = $(this).data("id");
+                $(this).after(templates.addComment({ root: "comment", id: id}));
+                $(this).remove();
             });
 
             $(".commentVoteUp").on('click', function(e){
@@ -168,11 +181,11 @@
 			);
 		},
 
-        postComment: function(id){
-            var value = $("#commentField").val();
+        postComment: function(id, root){
+            var value = $("#commentField-" + root + "-" + id).val();
             if(value){
-                $("#commentField").val("")
-                dataservice.comment.post(id, value);
+                $("#commentField-" + root + "-" + id).val("");
+                dataservice.comment.post(id, root, value);
             }
         },
 

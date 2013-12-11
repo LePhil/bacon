@@ -155,6 +155,16 @@ app.post('/comment/:id/', checkAuth, function (req, res) {
     io.sockets.emit('message', { action: "AddComment" });
 });
 
+app.post('/comment/:id/comment', checkAuth, function (req, res) {
+    var newComment = new Comment(comments.length, req.body.text, users[req.session.user_id].name);
+    comments.push(newComment);
+
+    var parentComment = comments[req.params.id];
+    parentComment.comments.push(newComment);
+    res.json(newComment);
+    io.sockets.emit('message', { action: "AddChildComment" });
+});
+
 app.post('/comment/:id/up', checkAuth, function (req, res) {
     res.json(comments[req.params.id].rating._up(req.session.user_id));
     io.sockets.emit('message', { action: "Rated" });

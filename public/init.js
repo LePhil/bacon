@@ -19,9 +19,9 @@ function( $, ui, io, sammy, dataservice ) {
 		this.post("#/register",             function(context){ ui.register(); });
 		this.get("#/submit", 	            function(context){ ui.showSubmitEntry(); context.log("submit"); });
         this.post("#/entry", 	            function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
-        this.post("#/entry/:id/comment",    function(context){ var id = this.params['id']; ui.postComment(id); context.log("post comment"); ui.showEntry(id); });
+        this.post("#/entry/:id/comment",    function(context){ var id = this.params['id']; ui.postComment(id, "entry"); context.log("post comment"); ui.showEntry(id); });
 		this.get("#/entry/:id",             function(context){ var id = this.params['id']; context.log("show entry", id); ui.showEntry(id); });
-//        this.get("#/comment/:id/up",        function(context){ var id = this.params['id']; ui.voteCommentUp(id), this.redirect("#/entry/0"); context.log("vote comment up"); });
+        this.post("#/comment/:id/comment",  function(context){ var id = this.params['id']; ui.postComment(id, "comment"); ui.showComments(); context.log("post child comment");});
 
 		this.bind("register-success", function() { this.redirect("#/"); });
 	});
