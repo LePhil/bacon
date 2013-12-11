@@ -17,6 +17,7 @@
 		},
         comment: {
             post: function(id, comment){
+            	console.log( "post on comment" );
                 $.post("entry/" + id + "/comment", {text: comment})
             }
         },
