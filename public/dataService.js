@@ -1,5 +1,6 @@
 ﻿define('dataservice', ['jquery', 'core'], function ($) {
 
+	console.log("dataservice");
 	var dataservice = {
 		entry: {
 			getAll: function() {
@@ -52,7 +53,7 @@
 					$.event.trigger({ type: "logout" }); 
 				});
 			},
-			register: function( username, password ) {
+			register: function(username, password) {
 				$.post("register", {name: username, password: password }, function(success) {
 					$.event.trigger({ type: "register-" + (success ? "success" : "failed") });
 				});
@@ -61,4 +62,5 @@
 	}
 
 	return dataservice;
+
 });
