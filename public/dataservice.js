@@ -27,6 +27,9 @@
         },
 		user: {
 			loggedInUser: undefined,
+			isLoggedIn: function() {
+				return this.loggedInUser != undefined;
+			},
 			checkLoggedIn: function(){
 				var that = this;
 				if (!!this.loggedInUser) { 

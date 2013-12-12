@@ -107,8 +107,16 @@
 			dataservice.entry.get(id).then(function(link) {
 				$("#showEntry").append( templates.link(link)).append("<p/>");
                 $("#addComment").append(templates.addComment({root: "entry", id: id}));
-
                 ui.renderComments(link);
+			});
+
+			// Show on login
+			$(document).on("login", function() {
+				$("#addComment").show();
+			});
+			// hide on logout
+			$(document).on("logout", function() {
+				$("#addComment").hide();
 			});
 			
 		},
@@ -135,9 +143,11 @@
 
             $(".reply").on('click', function(e){
                 e.preventDefault();
-                var id = $(this).data("id");
-                $(this).after(templates.addComment({ root: "comment", id: id}));
-                $(this).remove();
+                if ( dataservice.user.isLoggedIn() ) {
+	                var id = $(this).data("id");
+	                $(this).after(templates.addComment({ root: "comment", id: id}));
+	                $(this).remove();
+	            }
             });
 
             $(".commentVoteUp").on('click', function(e){
