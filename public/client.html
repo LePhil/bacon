@@ -30,7 +30,9 @@
                 <p>Submitted at {{=it.createTimeDisplay}} by <span class="username">{{=it.author}}</span></p>
                 <p>
                     <img src="images/comment_32.png" />
-                    <a id="link-comment-{{=it.id}}" href="#/entry/{{=it.id}}">Comments</a>
+                    <a id="link-comment-{{=it.id}}" href="#/entry/{{=it.id}}">
+                        {{=it.comments.length}} Comment{{? it.comments.length != 1 }}s{{?}}
+                    </a>
                 </p>
             </div>
         </div>
