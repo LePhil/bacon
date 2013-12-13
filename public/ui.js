@@ -24,8 +24,12 @@
 		$("#content > div").addClass("hidden");
 	}
 
-	function show(what) {
-		$(what).removeClass("hidden");
+	function hide( el ) {
+		$(el).addClass("hidden");
+	}
+
+	function show( el ) {
+		$(el).removeClass("hidden");
 	}
 
 	function initLoginArea(ui) {
@@ -66,6 +70,7 @@
 		$("#entries").empty();
 
 		$.each(entries, function(index, entry) {
+			console.log(entry);
 			$("#entries").append( templates.link(entry));
 		});
 
@@ -102,7 +107,9 @@
 			$("#showEntry").empty();
             $("#addComment").empty();
 			show("#showEntry");
-            show("#addComment");
+			if( dataservice.user.isLoggedIn() ) {
+            	show("#addComment");
+			}
 
 			dataservice.entry.get(id).then(function(link) {
 				$("#showEntry").append( templates.link(link)).append("<p/>");
@@ -110,13 +117,19 @@
                 ui.renderComments(link);
 			});
 
+            hide(".commentCounter");
+
 			// Show on login
 			$(document).on("login", function() {
-				$("#addComment").show();
+				//$("#addComment, .reply").show();
+				show("#addComment");
+				show(".reply");
 			});
 			// hide on logout
 			$(document).on("logout", function() {
-				$("#addComment").hide();
+				//$("#addComment, .reply").hide();
+				hide("#addComment");
+				hide(".reply");
 			});
 			
 		},
@@ -136,18 +149,15 @@
             };
 
             $(link.comments).each(function(index, comment){
-                console.log("link.comments each", comment, !!comment);
                 $("#addComment").after( templates.comment(comment));
                 $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
             });
 
-            $(".reply").on('click', function(e){
+        	$(".reply").on('click', function(e){
                 e.preventDefault();
-                if ( dataservice.user.isLoggedIn() ) {
-	                var id = $(this).data("id");
-	                $(this).after(templates.addComment({ root: "comment", id: id}));
-	                $(this).remove();
-	            }
+                var id = $(this).data("id");
+                $(this).after(templates.addComment({ root: "comment", id: id}));
+                $(this).remove();
             });
 
             $(".commentVoteUp").on('click', function(e){

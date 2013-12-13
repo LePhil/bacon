@@ -7,6 +7,8 @@ module.exports = function Rating() {
        if (!voters[userId]) {
             self.value++;
             voters[userId] = true;
+        } else {
+            self.value-=2;
         }
         return self.value;
     };
@@ -15,6 +17,8 @@ module.exports = function Rating() {
         if (!voters[userId]) {
             self.value--;
             voters[userId] = true;
+        } else {
+            self.value+=2;
         }
         return self.value;
     };
