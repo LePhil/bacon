@@ -23,6 +23,9 @@
 	float: left;
 	width: 35px;
 }
+.comment .votingContainer {
+	width: 20px;
+}
 
 .votingContainer p {
 	width: 100%;
@@ -30,7 +33,25 @@
 	font-size: 20px;
 	margin: 0px;
 }
+.comment .votingContainer p {
+	font-size: 16px;
+}
+.votingContainer a img {
+	height: 100%;
+	width: 100%;
+}
 
 .comment-children {
     margin-top: 30px;
+}
+
+#showEntry {
+	border-bottom: 1px solid #DDD;
+	margin-bottom: 15px;
+}
+
+#addComment {
+	border-bottom: 1px solid #DDD;
+	margin-bottom: 15px;
+	padding-bottom: 10px;	
 }

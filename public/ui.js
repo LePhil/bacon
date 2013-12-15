@@ -86,12 +86,40 @@
 	}
 
 	var ui = {
+		// Show all entries
 		showEntries: function(){
 			hideAll();
 			dataservice.entry.getAll().then(function(data){
 				renderEntries(data);
 				show("#entries");
 			});
+		},
+		// Show just one entry
+		showEntry: function(id){
+			hideAll();
+			$("#showEntry").empty();
+            $("#addComment").empty();
+			show("#showEntry");
+
+			dataservice.entry.get(id).then(function(link) {
+				link.single = true;
+				$("#showEntry").append( templates.link( link ) ).append("<p/>");
+                $("#addComment").append( templates.addComment({root: "entry", id: id}) );
+                ui.renderComments(link);
+			});
+            
+			// Show on login
+			$(document).on("login", function() {
+				show("#addComment");
+				show(".reply");
+			});
+			// hide on logout
+			$(document).on("logout", function() {
+				hide("#addComment");
+				hide(".reply");
+			});
+
+			dataservice.user.checkLoggedIn();
 		},
 		showRegistration: function(){
 			hideAll();
@@ -102,37 +130,6 @@
 			show("#submitEntry");
 			$("#submitEntry form input[type='text']").val('');
 		},
-		showEntry: function(id){
-			hideAll();
-			$("#showEntry").empty();
-            $("#addComment").empty();
-			show("#showEntry");
-			if( dataservice.user.isLoggedIn() ) {
-            	show("#addComment");
-			}
-
-			dataservice.entry.get(id).then(function(link) {
-				$("#showEntry").append( templates.link(link)).append("<p/>");
-                $("#addComment").append(templates.addComment({root: "entry", id: id}));
-                ui.renderComments(link);
-			});
-
-            hide(".commentCounter");
-
-			// Show on login
-			$(document).on("login", function() {
-				//$("#addComment, .reply").show();
-				show("#addComment");
-				show(".reply");
-			});
-			// hide on logout
-			$(document).on("logout", function() {
-				//$("#addComment, .reply").hide();
-				hide("#addComment");
-				hide(".reply");
-			});
-			
-		},
         showComments: function(){
             var linkId = $(".link").data("id");
             dataservice.entry.get(linkId).then(function(link) {
@@ -142,7 +139,7 @@
         renderComments: function(link){
             $('.comment').remove();
 
-            var renderChildren = function(parentId, comment){
+            var renderChildren = function( parentId, comment ){
                 console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
                 $("#comment-children-" + parentId).append( templates.comment(comment));
                 $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });

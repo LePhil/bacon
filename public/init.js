@@ -11,19 +11,20 @@ function( $, ui, io, sammy, dataservice ) {
 
 	var app = sammy("body", function(){
 
-		// Sammy rules:
-		this.get("#/", 			            function(context){ ui.showEntries(); context.log("entries"); });
-		this.post("#/login", 	            function(context){ ui.login(); context.log("login"); });
-		this.post("#/logout", 	            function(context){ ui.logout(); context.log("logout"); });
-		this.get("#/register", 	            function(context){ ui.showRegistration(); context.log("register"); });
-		this.post("#/register",             function(context){ ui.register(); });
-		this.get("#/submit", 	            function(context){ ui.showSubmitEntry(); context.log("submit"); });
-        this.post("#/entry", 	            function(context){ ui.postEntry(); this.redirect("#/"); context.log("post entry"); });
-        this.post("#/entry/:id/comment",    function(context){ var id = this.params['id']; ui.postComment(id, "entry"); context.log("post comment"); ui.showEntry(id); });
-		this.get("#/entry/:id",             function(context){ var id = this.params['id']; context.log("show entry", id); ui.showEntry(id); });
-        this.post("#/comment/:id/comment",  function(context){ var id = this.params['id']; ui.postComment(id, "comment"); ui.showComments(); context.log("post child comment");});
+		// Sammy's rules:
+		this.get("#/", 			            function(){ ui.showEntries(); });
+		this.get("#/register", 	            function(){ ui.showRegistration(); });
+		this.get("#/submit", 	            function(){ ui.showSubmitEntry(); });
+		this.get("#/entry/:id",             function(){ var id = this.params['id']; ui.showEntry(id); });
 
-		this.bind("register-success", function() { this.redirect("#/"); });
+		this.post("#/login", 	            function(){ ui.login();  });
+		this.post("#/logout", 	            function(){ ui.logout();  });
+		this.post("#/register",             function(){ ui.register(); });
+        this.post("#/entry", 	            function(){ ui.postEntry(); this.redirect("#/"); });
+        this.post("#/entry/:id/comment",    function(){ var id = this.params['id']; ui.postComment(id, "entry");ui.showEntry(id); });
+        this.post("#/comment/:id/comment",  function(){ var id = this.params['id']; ui.postComment(id, "comment"); ui.showComments();  });
+
+		this.bind("register-success",		function() { this.redirect("#/"); });
 	});
 
 	// Start the app

@@ -37,6 +37,7 @@
             </div>
         </div>
     </script>
+    
     <script id="template-addComment" type="text/template">
         <form role="form" action="#/{{=it.root}}/{{=it.id}}/comment" method="post" accept-charset="utf-8">
             <div class="form-group">
@@ -46,6 +47,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </script>
+
     <script id="template-comment" type="text/template">
         <div class="comment container row">
             <div class="votingContainer">
@@ -67,6 +69,7 @@
             </div>
         </div>
     </script>
+
     <script id="template-message" type="text/template">
        <div class="alert col-md-4 col-md-offset-2">
             <button class="close" data-dismiss="alert" type="button">&times;</button>
@@ -77,9 +80,11 @@
     <body>
         <nav class="navbar navbar-default navbar-fixed-top container" role="navigation">
             <a class="navbar-brand" href="#/">VoteBacon</a>
+           
             <ul class="nav navbar-nav navbar-left">
                 <li><a id="submitLink" class="btn">Submit Link</a></li>
             </ul>
+
             <ul id="nav-logout" class="nav navbar-nav navbar-right" style="display:none">
                 <li></li>
                 <li>
@@ -88,6 +93,7 @@
                     </form>
                 </li>
             </ul>
+
             <ul id="nav-login" class="nav navbar-nav navbar-right" style="display:none">
                 <li><a id="register" href="#/register">Register</a></li>
                 <li class="dropdown hand">
@@ -108,6 +114,7 @@
                 </li>
             </ul>
         </nav>
+
         <div class="container" id="content">
             <div class="container hidden" id="entries"></div>
             <div class="container hidden" id="registration">
@@ -123,6 +130,7 @@
                     <input class="btn btn-primary" type="submit" value="Register" />
                 </form>
             </div>
+
             <div class="container" id="submitEntry">
                 <form id="submitLink-form" class="form col-md-4 col-md-offset-4" action="#/entry" method="post" accept-charset="utf-8">
                     <h3>Submit Entry</h3>
@@ -139,7 +147,7 @@
             </div>
             <div class="container hidden" id="showEntry">
             </div>
-            <div id="addComment">
+            <div id="addComment" class="container">
             </div>
         </div> 
     </body>
