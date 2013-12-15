@@ -8,6 +8,7 @@ require.config({
 		doT: 'Libs/doT/doT',
 		bootstrap: 'Libs/bootstrap/js/bootstrap.min',
 		sammy: 'Libs/sammy',
-		'socket.io': '/socket.io/socket.io'
+		'socket.io': '/socket.io/socket.io',
+		translations: 'translations'
 	}
 });

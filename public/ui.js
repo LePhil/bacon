@@ -1,36 +1,46 @@
-﻿define('ui', ['dataservice', 'jquery', 'doT', 'sammy', 'core', 'bootstrap'], function(dataservice, $, doT, sammy){
+﻿define('ui', ['dataservice', 'jquery', 'doT', 'sammy', 'translations', 'core', 'bootstrap'], function(dataservice, $, doT, sammy, i18n){
 
-	var templates = {};
+	var templates = {},
+		language="en-US";
 	templates.link = doT.template($("#template-link").text());
 	templates.message = doT.template($("#template-message").text());
     templates.addComment = doT.template($("#template-addComment").text());
 	templates.comment = doT.template($("#template-comment").text());
 
-	function showError( message ) {
-		
+	// Get language from the headers.
+	$.ajax({ 
+		url: "http://ajaxhttpheaders.appspot.com", 
+		dataType: 'jsonp', 
+		success: function(headers) {
+			var temp = headers['Accept-Language'].substr(0, 5);
+			if ( i18n[temp] !== undefined ) {
+				language = temp;
+			}
+		}
+	});
+
+	function showError( alert ) {	
 		$("#content").prepend(
-			$( templates.message( message ) ).addClass("alert-danger")
+			$( templates.message( alert ) ).addClass("alert-danger")
 		);
 	}
 
 	function showMessage( message ) {
-		var msg = $( templates.message( message ) ).addClass("alert-info");
-		$("#content").prepend( msg );	
-		setTimeout(function(){ msg.remove(); }, 5000); // autoremove after 5s
+		var messageElement = $( templates.message( message ) ).addClass("alert-info");
+		$("#content").prepend( messageElement );	
+		setTimeout(
+			function(){ messageElement.remove(); },
+			5000
+		);
 	}
 
-	function hideAll() {
+	function hideAllMessages() {
 		$("#content > .alert").remove();
 		$("#content > div").addClass("hidden");
 	}
 
-	function hide( el ) {
-		$(el).addClass("hidden");
-	}
-
-	function show( el ) {
-		$(el).removeClass("hidden");
-	}
+	function hide( el ) { $(el).addClass("hidden"); }
+	function show( el ) { $(el).removeClass("hidden"); }
 
 	function initLoginArea(ui) {
 		$(document).on("login", function(user) {
@@ -41,7 +51,7 @@
 		});
 
 		$(document).on("login-failed", function(){
-			showError("Login failed");
+			showError( i18n[language]["login-failed"] );
 		})
 		
 		$(document).on("logout", function (){
@@ -53,33 +63,30 @@
 		dataservice.user.checkLoggedIn();
 	}
 
-	function initRegisterArea(ui){
+	function initRegisterArea(){
 		$(document).on("register-success", function(){
-			console.log("registration successful");
 			sammy("body").trigger("register-success");
-			showMessage("Registration successful!")
+			showMessage( i18n[language]["register-success"] );
 		});
 
 		$(document).on("register-failed", function(){
-			console.log("registration failed");
-			showError("Registration failed! User exists or didn't provide username and password");
+			showError( i18n[language]["register-failed"] );
 		});
 	}
 
 	function renderEntries(entries) {
 		$("#entries").empty();
 
-		$.each(entries, function(index, entry) {
-			console.log(entry);
-			$("#entries").append( templates.link(entry));
+		$.each(entries, function( index, entry ) {
+			$("#entries").append( templates.link( entry ) );
 		});
 
 		$("a[id|=link-vote]").click(function(){
 			var linkId = $(this).attr("id");
 			var matches = linkId.match(/link-vote-(up|down)-(\d+)/);
 			$.post("entry/" + matches[2] + "/" + matches[1], function(){
-				$.getJSON("entry/" + matches[2], function(data){
-					$("#link-rating-" + matches[2]).text(data.rating.value);
+				$.getJSON("entry/" + matches[2], function( data ){
+					$( "#link-rating-" + matches[2] ).text( data.rating.value );
 				});
 			});
 		});
@@ -88,15 +95,15 @@
 	var ui = {
 		// Show all entries
 		showEntries: function(){
-			hideAll();
-			dataservice.entry.getAll().then(function(data){
-				renderEntries(data);
+			hideAllMessages();
+			dataservice.entry.getAll().then(function( data ){
+				renderEntries( data );
 				show("#entries");
 			});
 		},
 		// Show just one entry
 		showEntry: function(id){
-			hideAll();
+			hideAllMessages();
 			$("#showEntry").empty();
             $("#addComment").empty();
 			show("#showEntry");
@@ -105,7 +112,7 @@
 				link.single = true;
 				$("#showEntry").append( templates.link( link ) ).append("<p/>");
                 $("#addComment").append( templates.addComment({root: "entry", id: id}) );
-                ui.renderComments(link);
+                ui.renderComments( link );
 			});
             
 			// Show on login
@@ -122,11 +129,11 @@
 			dataservice.user.checkLoggedIn();
 		},
 		showRegistration: function(){
-			hideAll();
+			hideAllMessages();
 			show("#registration");
 		},
 		showSubmitEntry: function(){
-			hideAll();
+			hideAllMessages();
 			show("#submitEntry");
 			$("#submitEntry form input[type='text']").val('');
 		},
@@ -136,36 +143,43 @@
                 ui.renderComments(link);
             });
         },
-        renderComments: function(link){
+        renderComments: function( link ){
             $('.comment').remove();
 
             var renderChildren = function( parentId, comment ){
-                console.log("renderChildren", parentId, comment, $("comment-children-" + parentId));
                 $("#comment-children-" + parentId).append( templates.comment(comment));
-                $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
+                $(comment.comments).each(function( index, child ){ renderChildren( comment.id, child ); });
             };
 
-            $(link.comments).each(function(index, comment){
+            $(link.comments).each(function( index, comment ){
                 $("#addComment").after( templates.comment(comment));
-                $(comment.comments).each(function(index, child){ renderChildren(comment.id, child); });
+                $( comment.comments ).each(function(index, child){ renderChildren( comment.id, child ); });
             });
 
         	$(".reply").on('click', function(e){
                 e.preventDefault();
-                var id = $(this).data("id");
-                $(this).after(templates.addComment({ root: "comment", id: id}));
-                $(this).remove();
+                var id = $( this ).data("id");
+                $( this ).after(templates.addComment({ root: "comment", id: id}));
+                $( this ).remove();
             });
 
             $(".commentVoteUp").on('click', function(e){
                 e.preventDefault();
-                var commentId = $(this).data('id');
-                ui.voteCommentUp(link.id,commentId);
+                var commentID = $( this ).data('id');
+                ui.voteCommentUp( link.id, commentID );
+
+                $(this).toggleClass("voted");
+                $(".commentVoteDown").toggleClass( "voted", false );
+                // TODO
             });
             $(".commentVoteDown").on('click', function(e){
                 e.preventDefault();
-                var commentId = $(this).data('id');
-                ui.voteCommentDown(link.id,commentId);
+                var commentID = $( this ).data('id');
+                ui.voteCommentDown( link.id, commentID );
+
+                $(this).toggleClass("voted");
+                $(".commentVoteUp").toggleClass( "voted", false );
+                // TODO
             });
         },
 		login: function() {
@@ -181,14 +195,14 @@
 			dataservice.user.logout();
 		},
 		register: function() {
-			if ( $("#register_name").val() !== "" && $("#register_name").val() !== null &&
-				 $("#register_password").val() !== "" && $("#register_password").val() !== null  ) {
-				dataservice.user.register(
-					$("#register_name").val(),
-					$("#register_password").val()
-				);
+			var name = $("#register_name").val(),
+				pw = $("#register_password").val();
+
+			// none must be empty	
+			if ( name !== "" && name !== null && pw !== "" && pw !== null  ) {
+				dataservice.user.register( name, pw );
 			} else {
-				showMessage( "Username and Password cannot be empty" );
+				showMessage( i18n[language]["username-and-password-empty"] );
 			}
 		},
 		postEntry: function() {
@@ -199,15 +213,15 @@
 		},
 
         postComment: function(id, root){
-            var value = $("#commentField-" + root + "-" + id).val();
-            if(value){
-                $("#commentField-" + root + "-" + id).val("");
+            var value = $( "#commentField-" + root + "-" + id ).val();
+            if( value ){
+                $( "#commentField-" + root + "-" + id ).val("");
                 dataservice.comment.post(id, root, value);
             }
         },
 
         voteCommentUp: function(linkId, commentId){
-            dataservice.comment.vote(commentId, "up")
+            dataservice.comment.vote( commentId, "up" )
             var link = dataservice.entry.get(linkId).then(function(link) {
                 ui.renderComments(link);
             });
