@@ -91,7 +91,7 @@
 				entryID = linkFragments[2];
 			$.post("entry/" + entryID + "/" + direction, function(){
 				$.getJSON("entry/" + entryID, function( data ){
-					$( "#link-rating-" + entryID ).text( data.rating.value );
+					$( "#entries #link-rating-" + entryID ).text( data.rating.value );
 				});
 			});
 			return false;
@@ -117,6 +117,19 @@
 			dataservice.entry.get(id).then(function(link) {
 				link.single = true;
 				$("#showEntry").append( templates.link( link ) ).append("<p/>");
+
+                $("a[id|=link-vote]").click(function(e){
+                    e.preventDefault();
+                    var linkId = $(this).attr("id");
+                    var matches = linkId.match(/link-vote-(up|down)-(\d+)/);
+                    $.post("entry/" + matches[2] + "/" + matches[1], function(){
+                        $.getJSON("entry/" + matches[2], function( data ){
+                            $( "#showEntry #link-rating-" + matches[2] ).text( data.rating.value );
+                        });
+                    });
+                    return false;
+                });
+
                 $("#addComment").append( templates.addComment({root: "entry", id: id}) );
                 ui.renderComments( link );
 			});

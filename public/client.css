@@ -55,3 +55,6 @@
 	margin-bottom: 15px;
 	padding-bottom: 10px;	
 }
+.voted {
+	border: 1px solid red;
+}
