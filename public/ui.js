@@ -37,6 +37,7 @@
 				renderEntries( data );
 
 				show("#entries");
+
 			});
 		},
 		// Show just one entry
@@ -202,16 +203,16 @@
 			$("#nav-login").hide();
 			$("#nav-logout").show();
 		});
-
-		$(document).on("login-failed", function(){
-			showError( i18n[language]["login-failed"] );
-		})
 		
 		$(document).on("logout", function (){
 			$("#submitLink").removeAttr("href").addClass("disabled");
 			$("#nav-login").show();
 			$("#nav-logout").hide();
 		});
+
+		$(document).on("login-failed", function(){
+			showError( i18n[language]["login-failed"] );
+		})
 
 		dataservice.user.checkLoggedIn();
 	}
