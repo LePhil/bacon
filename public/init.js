@@ -12,11 +12,13 @@ function( $, ui, io, sammy, dataservice ) {
 	var app = sammy("body", function(){
 
 		// Sammy's rules:
+		// GET
 		this.get("#/", 			            function(){ ui.showEntries(); });
 		this.get("#/register", 	            function(){ ui.showRegistration(); });
 		this.get("#/submit", 	            function(){ ui.showSubmitEntry(); });
 		this.get("#/entry/:id",             function(){ var id = this.params['id']; ui.showEntry(id); });
 
+		// POST
 		this.post("#/login", 	            function(){ ui.login();  });
 		this.post("#/logout", 	            function(){ ui.logout();  });
 		this.post("#/register",             function(){ ui.register(); });

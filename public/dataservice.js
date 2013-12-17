@@ -1,6 +1,5 @@
 ﻿define('dataservice', ['jquery', 'core'], function ($) {
 
-	console.log("dataservice");
 	var dataservice = {
 		entry: {
 			getAll: function() {
@@ -18,7 +17,6 @@
 		},
         comment: {
             post: function(id, root, comment){
-            	console.log( "post on comment" );
                 $.post(root + "/" + id + "/comment", {text: comment})
             },
             vote: function(id, direction){
