@@ -1,6 +1,6 @@
 var Rating = require('./rating.js');
 
-module.exports = function Link(id, title, author, url) {
+module.exports = function Link( id, title, author, url ) {
     this.id = id;
     this.title = title;
     this.author = author;
