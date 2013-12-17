@@ -11,8 +11,11 @@
 			post: function( title, url ) {
 				$.post("entry", { title: title, url: url });
 			},
-			vote: function( id, direction ){
+			vote: function( id, direction ) {
 				$.post("entry/" + id + "/" + direction);
+			},
+			canUpVote: function( id ) {
+				return this.get( id ).rating._hasUpVoted();
 			}
 		},
         comment: {

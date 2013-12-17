@@ -5,10 +5,10 @@ require.config({
 	
 	paths: {
 		jquery: 'Libs/jquery-2.0.3',
-		doT: 'Libs/doT/doT',
 		bootstrap: 'Libs/bootstrap/js/bootstrap.min',
+		translations: 'translations',
+		doT: 'Libs/doT/doT',
 		sammy: 'Libs/sammy',
-		'socket.io': '/socket.io/socket.io',
-		translations: 'translations'
+		'socket.io': '/socket.io/socket.io'
 	}
 });

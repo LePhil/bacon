@@ -35,6 +35,7 @@
 			hideAllMessages();
 			dataservice.entry.getAll().then(function( data ){
 				renderEntries( data );
+
 				show("#entries");
 			});
 		},
@@ -103,7 +104,7 @@
         	$(".reply").on('click', function( e ){
                 e.preventDefault();
                 var id = $( this ).data("id");
-                $( this ).after(tmplts.addComment({ root: "comment", id: id}));
+                $( this ).after( tmplts.addComment({ root: "comment", id: id}) );
                 $( this ).remove();
             });
 
@@ -143,7 +144,8 @@
 				pw = $("#register_password").val();
 
 			// none must be empty	
-			if ( name !== "" && name !== null && pw !== "" && pw !== null  ) {
+			if ( name !== "" && name !== null &&
+				 pw !== ""   && pw !== null  ) {
 				dataservice.user.register( name, pw );
 			} else {
 				showNotification( i18n[language]["username-and-password-empty"] );
@@ -191,7 +193,7 @@
 		}
 	};
 
-	function initLoginArea(ui) {
+	function initLoginArea( ui ) {
 
 		// Show "Submit Link" and Logout buttons, hide login button
 		$(document).on("login", function( user ) {
@@ -246,7 +248,6 @@
 		$.post("entry/" + entryID + "/" + direction, function(){
 			$.getJSON("entry/" + entryID, function( data ){
 				$( container + " #link-rating-" + entryID ).text( data.rating.value );
-				console.log(data);
 			});
 		});
 	}
