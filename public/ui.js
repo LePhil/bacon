@@ -43,7 +43,7 @@
 	function show( el ) { $(el).removeClass("hidden"); }
 
 	function initLoginArea(ui) {
-		
+
 		// Show "Submit Link" and Logout buttons, hide login button
 		$(document).on("login", function(user) {
 			ui.user = user;
@@ -83,7 +83,8 @@
 			$("#entries").append( templates.link( entry ) );
 		});
 
-		$("a[id|=link-vote]").click(function(){
+		$("a[id|=link-vote]").click(function(e){
+			e.preventDefault();
 			var linkId = $(this).attr("id");
 			var matches = linkId.match(/link-vote-(up|down)-(\d+)/);
 			$.post("entry/" + matches[2] + "/" + matches[1], function(){
@@ -91,6 +92,7 @@
 					$( "#link-rating-" + matches[2] ).text( data.rating.value );
 				});
 			});
+			return false;
 		});
 	}
 
