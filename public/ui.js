@@ -85,18 +85,18 @@
 
 		$("a[id|=link-vote]").click(function(e){
 			e.preventDefault();
-			vote( $(this).attr("id") );
+			vote( $(this).attr("id"), "#entries" );
 			return false;
 		});
 	}
 
-	function vote( linkID ) {
+	function vote( linkID, container ) {
 		var linkFragments = linkID.match(/link-vote-(up|down)-(\d+)/),
 			direction = linkFragments[1],
 			entryID = linkFragments[2];
 		$.post("entry/" + entryID + "/" + direction, function(){
 			$.getJSON("entry/" + entryID, function( data ){
-				$( "#entries #link-rating-" + entryID ).text( data.rating.value );
+				$( container + " #link-rating-" + entryID ).text( data.rating.value );
 			});
 		});
 	}
@@ -123,7 +123,7 @@
 
                 $("a[id|=link-vote]").click(function(e){
                     e.preventDefault();
-                    vote( $(this).attr("id") );
+                    vote( $(this).attr("id"), "#showEntry" );
                     return false;
                 });
 
