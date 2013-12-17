@@ -85,11 +85,13 @@
 
 		$("a[id|=link-vote]").click(function(e){
 			e.preventDefault();
-			var linkId = $(this).attr("id");
-			var matches = linkId.match(/link-vote-(up|down)-(\d+)/);
-			$.post("entry/" + matches[2] + "/" + matches[1], function(){
-				$.getJSON("entry/" + matches[2], function( data ){
-					$( "#link-rating-" + matches[2] ).text( data.rating.value );
+			var linkId = $(this).attr("id"),
+				linkFragments = linkId.match(/link-vote-(up|down)-(\d+)/),
+				direction = linkFragments[1],
+				entryID = linkFragments[2];
+			$.post("entry/" + entryID + "/" + direction, function(){
+				$.getJSON("entry/" + entryID, function( data ){
+					$( "#link-rating-" + entryID ).text( data.rating.value );
 				});
 			});
 			return false;

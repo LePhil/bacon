@@ -110,7 +110,6 @@ app.get('/login', function (req, res) {
 
  
  app.get('/entries', function (req, res) {
-    console.log("get entries: ", entries.length);
     res.json(entries);
 });
 
@@ -167,12 +166,12 @@ app.post('/comment/:id/comment', checkAuth, function (req, res) {
 
 app.post('/comment/:id/up', checkAuth, function (req, res) {
     res.json(comments[req.params.id].rating._up(req.session.user_id));
-    io.sockets.emit('message', { action: "Rated up" });
+    io.sockets.emit('message', { action: "Rated up by "+req.session.user_id });
 });
 
 app.post('/comment/:id/down', checkAuth, function (req, res) {
     res.json(comments[req.params.id].rating._down(req.session.user_id));
-    io.sockets.emit('message', { action: "Rated down" });
+    io.sockets.emit('message', { action: "Rated down by "+req.session.user_id });
 });
 
 app.post('/logout', function (req, res) {

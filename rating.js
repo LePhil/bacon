@@ -22,7 +22,6 @@ module.exports = function Rating() {
             upVoters[userId] = false;
         }
 
-        console.log("now has", self.value);
         return self.value;
     };
     
@@ -44,9 +43,15 @@ module.exports = function Rating() {
             downVoters[userId] = false;
         }
 
-        console.log("now has", self.value);
         return self.value;
+    };
 
+    this._hasUpVoted = function( userID ) {
+        return upVoters[userId];
+    };
+
+    this._hasDownVoted = function( userID ) {
+        return downVoters[userId];
     };
 };
 
