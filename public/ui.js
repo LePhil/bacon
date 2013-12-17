@@ -43,6 +43,8 @@
 	function show( el ) { $(el).removeClass("hidden"); }
 
 	function initLoginArea(ui) {
+		
+		// Show "Submit Link" and Logout buttons, hide login button
 		$(document).on("login", function(user) {
 			ui.user = user;
 			$("#submitLink").attr("href", "#/submit").removeClass("disabled");
