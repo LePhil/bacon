@@ -62,7 +62,7 @@
                 </a>
             </div>
             <div class="col-md-offset-1 commentInfo">
-                <small>By <strong>{{=it.author}}</strong> {{=it.createTimeDisplay}}</small>
+                <p>Submitted at {{=it.createTimeDisplay}} by <span class="username">{{=it.author}}</span></p>
                 <p>{{=it.text}}</p>
                 <a href="#" class="reply" data-id="{{=it.id}}">Reply</a>
                 <div id="comment-children-{{=it.id}}" class="comment-children"></div>

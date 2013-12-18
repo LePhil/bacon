@@ -38,11 +38,13 @@
 					return; 
 				}
 				
-				$.getJSON("login", function( data ){
-					if (typeof( data ) == "string" && data !== "") {
-						that.loggedInUser = data;
-						$.event.trigger({ type: "login", name: data });
+				$.getJSON("login", function( username ){
+					if (typeof( username ) == "string" && username !== "") {
+						// Login
+						that.loggedInUser = username;
+						$.event.trigger({ type: "login", name: username });
 					} else {
+						// Logout
 						$.event.trigger({ type: "logout" });
 					}
 				});
@@ -50,6 +52,7 @@
 			login: function( username, password ) {
 				$.post("login", { name: username, password: password }, function( success ){
 					if ( success === true ) {
+						this.loggedInUser = username;
 						$.event.trigger({ type: "login", name: username });
 					} else {
 						$.event.trigger({ type: "login-failed" });
@@ -58,7 +61,8 @@
 			},
 			logout: function() {
 				$.post("logout", function( data ) { 
-					$.event.trigger({ type: "logout" }); 
+					this.loggedInUser = undefined;
+					$.event.trigger({ type: "logout" });
 				});
 			},
 			register: function( username, password ) {

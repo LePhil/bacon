@@ -20,7 +20,7 @@ function( $, ui, io, sammy, dataservice ) {
 		this.post("#/logout", 	            function(){ ui.logout();  });
 		this.post("#/register",             function(){ ui.register(); });
         this.post("#/entry", 	            function(){ ui.postEntry(); this.redirect("#/"); });
-        this.post("#/entry/:id/comment",    function(){ var id = this.params['id']; ui.postComment(id, "entry");ui.showEntry(id); });
+        this.post("#/entry/:id/comment",    function(){ var id = this.params['id']; ui.postComment(id, "entry"); ui.showEntry(id); });
         this.post("#/comment/:id/comment",  function(){ var id = this.params['id']; ui.postComment(id, "comment"); ui.showComments();  });
 
 		this.bind("register-success",		function() { this.redirect("#/"); });

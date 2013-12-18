@@ -58,3 +58,6 @@
 .voted {
 	/*border: 1px solid red;*/
 }
+.notLoggedIn {
+	/*opacity: 0.3;*/
+}

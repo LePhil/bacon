@@ -17,22 +17,13 @@
 		language="en-US";
 
 
-	// Get language from the headers.
-	$.ajax({ 
-		url: "http://ajaxhttpheaders.appspot.com", 
-		dataType: 'jsonp', 
-		success: function(headers) {
-			var temp = headers['Accept-Language'].substr(0, 5);
-			if ( i18n[temp] !== undefined ) {
-				language = temp;
-			}
-		}
-	});
+	// Get language from the navigator
+	language =  navigator.language || navigator.userLanguage;
 
 	var ui = {
 		// Show all entries
 		showEntries: function(){
-			hideAllMessages();
+			hideAllNotifications();
 			dataservice.entry.getAll().then(function( data ){
 				renderEntries( data );
 
@@ -42,12 +33,12 @@
 		},
 		// Show just one entry
 		showEntry: function(id){
-			hideAllMessages();
+			hideAllNotifications();
 			$("#showEntry").empty();
             $("#addComment").empty();
 			show("#showEntry");
 
-			dataservice.entry.get(id).then(function(link) {
+			dataservice.entry.get(id).then(function( link ) {
 				link.single = true;
 				$("#showEntry").append( tmplts.link( link ) ).append("<p/>");
 
@@ -75,11 +66,11 @@
 			dataservice.user.checkLoggedIn();
 		},
 		showRegistration: function(){
-			hideAllMessages();
+			hideAllNotifications();
 			show("#registration");
 		},
 		showSubmitEntry: function(){
-			hideAllMessages();
+			hideAllNotifications();
 			show("#submitEntry");
 			$("#submitEntry form input[type='text']").val('');
 		},
@@ -202,12 +193,16 @@
 			$("#submitLink").attr("href", "#/submit").removeClass("disabled");
 			$("#nav-login").hide();
 			$("#nav-logout").show();
+
+			adaptToLogin();
 		});
 		
 		$(document).on("logout", function (){
 			$("#submitLink").removeAttr("href").addClass("disabled");
 			$("#nav-login").show();
 			$("#nav-logout").hide();
+			
+			adaptToLogin();
 		});
 
 		$(document).on("login-failed", function(){
@@ -266,14 +261,25 @@
 		// Hide notification after 5 seconds
 		setTimeout( function(){ messageElement.remove(); }, 5000 );
 	}
-	function hideAllMessages() {
+	function hideAllNotifications() {
+		// remove alerts from DOM and hide the notification area
 		$("#content > .alert").remove();
 		$("#content > div").addClass("hidden");
 	}
 	
-	function hide( el ) { $(el).addClass("hidden"); }
-	function show( el ) { $(el).removeClass("hidden"); }
+	function hide( el ) { $( el ).toggleClass( "hidden", true ); }
+	function show( el ) { $( el ).toggleClass( "hidden", false ); }
 
+	function adaptToLogin() {
+		if (!!dataservice.user.loggedInUser) {
+			// Logged in: enable vote-buttons
+			console.log("logged in", dataservice.user.loggedInUser);
+			$(".votingContainer a").toggleClass( "notLoggedIn", false );
+		} else {
+			console.log( "not logged in", dataservice.user.loggedInUser );
+			$(".votingContainer a").toggleClass( "notLoggedIn", true );
+		}
+	}
 
 	return ui;
 
