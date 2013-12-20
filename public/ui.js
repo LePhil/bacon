@@ -21,16 +21,6 @@
 	language =  navigator.language || navigator.userLanguage;
 
 	var ui = {
-		// Show all entries
-		showEntries: function(){
-			hideAllNotifications();
-			dataservice.entry.getAll().then(function( data ){
-				renderEntries( data );
-
-				show("#entries");
-
-			});
-		},
 		// Show just one entry
 		showEntry: function(id){
 			hideAllNotifications();
@@ -38,13 +28,13 @@
             $("#addComment").empty();
 			show("#showEntry");
 
-			dataservice.entry.get(id).then(function( link ) {
+			dataservice.entry.get( id ).then(function( link ) {
 				link.single = true;
 				$("#showEntry").append( tmplts.link( link ) ).append("<p/>");
 
-                $("a[id|=link-vote]").click(function(e){
+                $("a[id|=link-vote]").click(function( e ){
                     e.preventDefault();
-                    vote( $(this).attr("id"), "#showEntry" );
+                    vote( $( this ).attr("id"), "#showEntry" );
                     return false;
                 });
 
@@ -65,14 +55,22 @@
 
 			dataservice.user.checkLoggedIn();
 		},
-		showRegistration: function(){
+		// Show all entries
+		showEntries: function(){
 			hideAllNotifications();
-			show("#registration");
+			dataservice.entry.getAll().then(function( data ){
+				renderEntries( data );
+				show("#entries");
+			});
 		},
 		showSubmitEntry: function(){
 			hideAllNotifications();
 			show("#submitEntry");
 			$("#submitEntry form input[type='text']").val('');
+		},
+		showRegistration: function(){
+			hideAllNotifications();
+			show("#registration");
 		},
         showComments: function(){
             var linkId = $(".link").data("id");
@@ -186,7 +184,6 @@
 	};
 
 	function initLoginArea( ui ) {
-
 		// Show "Submit Link" and Logout buttons, hide login button
 		$(document).on("login", function( user ) {
 			ui.user = user;
@@ -213,13 +210,15 @@
 	}
 
 	function initRegisterArea(){
+		// Failed?
+		$(document).on("register-failed", function(){
+			showError( i18n[language]["register-failed"] );
+		});
+
+		// Succeeded?
 		$(document).on("register-success", function(){
 			sammy("body").trigger("register-success");
 			showNotification( i18n[language]["register-success"] );
-		});
-
-		$(document).on("register-failed", function(){
-			showError( i18n[language]["register-failed"] );
 		});
 	}
 
@@ -257,9 +256,7 @@
 
 	function showNotification( message ) {
 		var messageElement = $( tmplts.notification( message ) ).addClass("alert-info");
-		$("#content").prepend( messageElement );	
-		// Hide notification after 5 seconds
-		setTimeout( function(){ messageElement.remove(); }, 5000 );
+		$("#content").prepend( messageElement );
 	}
 	function hideAllNotifications() {
 		// remove alerts from DOM and hide the notification area
@@ -282,5 +279,4 @@
 	}
 
 	return ui;
-
 });
